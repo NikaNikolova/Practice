@@ -3,168 +3,159 @@
 
 using namespace std;
 
-class Animal {
+// Abstract base class for all types of creatures
+class Creature {
 protected:
-    string name;
-    double weight;
-    string continent;
+    string _name;
+    double _mass;
+    string _origin;
 
 public:
-    Animal(string name, double weight,string continent)
-        : name(name), weight(weight), continent(continent) {}
+    Creature(string name, double mass, string origin)
+        : _name(name), _mass(mass), _origin(origin) {}
 
-    virtual void Eat() = 0;
-    virtual void Sleep() = 0;
-    virtual void Move() = 0;
-    virtual void MakeSound() = 0;
+    virtual void feed() = 0;
+    virtual void sleep() = 0;
+    virtual void locomote() = 0;
+    virtual void soundOff() = 0;
 };
 
-class ISwimable {
+// Interfaces for swimming and flying behaviors
+class SwimBehavior {
 public:
-    virtual void Swim() = 0;
+    virtual void swim() = 0;
 };
 
-class IFlyable {
+class FlyBehavior {
 public:
-    virtual void Fly() = 0;
-};
-class Cat : public Animal {
-public:
-    Cat(string name, double weight, const string continent)
-        : Animal(name, weight, continent) {}
-
-    void Eat() override {
-        cout << name << " eats fish" << endl;
-    }
-
-    void Sleep() override {
-        cout << name << " sleeps curled up" << endl;
-    }
-
-    void Move() override {
-        cout << name << " moves stealthily" << endl;
-    }
-
-    void MakeSound() override {
-        cout << name << " meows" << endl;
-    }
+    virtual void fly() = 0;
 };
 
-class Dog : public Animal, public ISwimable {
+// Specific animal classes
+class Felis : public Creature {
 public:
-    Dog(const string& _name, double _weight, const string& _continent)
-        : Animal(_name, _weight, _continent) {}
+    Felis(string name, double mass, string origin)
+        : Creature(name, mass, origin) {}
 
-    void Eat() override {
-        cout << name << " eats bones" << endl;
+    void feed() override {
+        cout << _name << " munches on some delicious meat." << endl;
     }
 
-    void Sleep() override {
-        cout << name << " sleeps on the floor" << endl;
+    void sleep() override {
+        cout << _name << " curls up in a cozy corner." << endl;
     }
 
-    void Move() override {
-        cout << name << " runs around" << endl;
+    void locomote() override {
+        cout << _name << " stealthily sneaks around." << endl;
     }
 
-    void MakeSound() override {
-        cout << name << " barks" << endl;
-    }
-
-    void Swim() override {
-        cout << name << " swims in the water" << endl;
+    void soundOff() override {
+        cout << _name << " meows." << endl;
     }
 };
 
-class Parrot : public Animal, public IFlyable {
+class Canis : public Creature, public SwimBehavior {
 public:
-    Parrot(string name, double weight, string continent)
-        : Animal(name, weight, continent) {}
+    Canis(string name, double mass, string origin)
+        : Creature(name, mass, origin) {}
 
-    void Eat() override {
-        cout << name << " eats seeds" << endl;
+    void feed() override {
+        cout << _name << " devours its meal." << endl;
     }
 
-    void Sleep() override {
-        cout << name << " sleeps on a perch" << endl;
+    void sleep() override {
+        cout << _name << " lies down with a heavy sigh." << endl;
     }
 
-    void Move() override {
-        cout << name << " flies from branch to branch" << endl;
+    void locomote() override {
+        cout << _name << " bounds joyfully." << endl;
     }
 
-    void MakeSound() override {
-        cout << name << " squawks" << endl;
+    void soundOff() override {
+        cout << _name << " woofs loudly." << endl;
     }
 
-    void Fly() override {
-        cout << name << " flies in the sky" << endl;
+    void swim() override {
+        cout << _name << " splashes in the water." << endl;
     }
 };
 
-class Duck : public Animal, public ISwimable, public IFlyable {
+class Psittaciformes : public Creature, public FlyBehavior {
 public:
-    Duck(string name, double weight, string continent)
-        : Animal(name, weight, continent) {}
+    Psittaciformes(string name, double mass, string origin)
+        : Creature(name, mass, origin) {}
 
-    void Eat() override {
-        cout << name << " eats insects and plants" << endl;
+    void feed() override {
+        cout << _name << " nibbles on seeds and nuts." << endl;
     }
 
-    void Sleep() override {
-        cout << name << " sleeps near the water" << endl;
+    void sleep() override {
+        cout << _name << " perches quietly." << endl;
     }
 
-    void Move() override {
-        cout << name << " swims and flies" << endl;
+    void locomote() override {
+        cout << _name << " flutters from branch to branch." << endl;
     }
 
-    void MakeSound() override {
-        cout << name << " quacks" << endl;
+    void soundOff() override {
+        cout << _name << " squawks intermittently." << endl;
     }
 
-    void Swim() override {
-        cout << name << " swims in the pond" << endl;
-    }
-
-    void Fly() override {
-        cout << name << " flies over the water" << endl;
+    void fly() override {
+        cout << _name << " soars through the air." << endl;
     }
 };
 
+class Anatidae : public Creature, public SwimBehavior, public FlyBehavior {
+public:
+    Anatidae(string name, double mass, string origin)
+        : Creature(name, mass, origin) {}
+
+    void feed() override {
+        cout << _name << " forages for food in the water." << endl;
+    }
+
+    void sleep() override {
+        cout << _name << " rests near the edge of the lake." << endl;
+    }
+
+    void locomote() override {
+        cout << _name << " waddles along the bank." << endl;
+    }
+
+    void soundOff() override {
+        cout << _name << " quacks repeatedly." << endl;
+    }
+
+    void swim() override {
+        cout << _name << " paddles around." << endl;
+    }
+
+    void fly() override {
+        cout << _name << " takes off from the water surface." << endl;
+    }
+};
+
+// Main function to demonstrate polymorphism
 int main() {
-    Cat cat("Whiskers", 5.0, "Europe");
-    Dog dog("Buddy", 10.0, "North America");
-    Parrot parrot("Polly", 0.5, "South America");
-    Duck duck("Donald", 2.0, "North America");
+    Creature* animals[] = {
+        new Felis("Tabby", 4.5, "Global"),
+        new Canis("Rover", 25.0, "Global"),
+        new Psittaciformes("Coco", 1.0, "South America"),
+        new Anatidae("Donald", 3.2, "Global")
+    };
 
-    cout << "-- Cat --" << endl;
-    cat.Eat();
-    cat.Sleep();
-    cat.Move();
-    cat.MakeSound();
+    for (auto animal : animals) {
+        animal->feed();
+        animal->sleep();
+        animal->locomote();
+        animal->soundOff();
+        if (auto swimmable = dynamic_cast<SwimBehavior*>(animal))
+            swimmable->swim();
+        if (auto flyable = dynamic_cast<FlyBehavior*>(animal))
+            flyable->fly();
+    }
 
-    cout << "-- Dog --" << endl;
-    dog.Eat();
-    dog.Sleep();
-    dog.Move();
-    dog.MakeSound();
-    dog.Swim();
-
-    cout << "-- Parrot --" << endl;
-    parrot.Eat();
-    parrot.Sleep();
-    parrot.Move();
-    parrot.MakeSound();
-    parrot.Fly();
-
-    cout << "-- Duck --" << endl;
-    duck.Eat();
-    duck.Sleep();
-    duck.Move();
-    duck.MakeSound();
-    duck.Swim();
-    duck.Fly();
-
+    for (auto animal : animals) delete animal;
     return 0;
 }
